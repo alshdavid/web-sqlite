@@ -11,22 +11,26 @@ The database is persisted using indexedDB
 Vendor the repo into your current project
 
 ```html
-<body>
+<html>
   <script type="module">
-    import { Sqlite } from './vendor/sqlite/client.js'
+    import { SQLite, IndexedDbFS } from "@alshdavid/sqlite-web";
 
-    const conn = await Sqlite.connect()
+    const sqlite = await SQLite.initialize({
+      fs: IndexedDbFS
+    });
 
-    const db = await conn.open({ name: 'test_db' })
+    const db = await sqlite.open("test");
 
-    await db.exec(`CREATE TABLE IF NOT EXISTS test_table ("id" TEXT UNIQUE, "val" TEXT)`);
+    await db.exec(
+      `CREATE TABLE IF NOT EXISTS test_table ("id" TEXT UNIQUE, "val" TEXT)`
+    );
 
-    await db.exec("INSERT INTO test_table (id, val) VALUES ('1', 'v1')")
-    await db.exec("INSERT INTO test_table (id, val) VALUES ('2', 'v2')")
-    await db.exec("INSERT INTO test_table (id, val) VALUES ('3', 'v3')")
+    await exec("INSERT INTO test_table (id, val) VALUES ('1', 'v1')");
+    await exec("INSERT INTO test_table (id, val) VALUES ('2', 'v2')");
+    await exec("INSERT INTO test_table (id, val) VALUES ('3', 'v3')");
 
-    const result = await db.exec("SELECT * FROM test_table")
-    console.log(result)
+    const result = await db.exec("SELECT * FROM test_table");
+    console.log(result);
   </script>
-</body>
+</html>
 ```
